@@ -1,5 +1,5 @@
 service:
-  name: serverless-wallscratch-app
+  name: wallscratch-app
 
 plugins:
   - serverless-webpack
@@ -27,7 +27,7 @@ provider:
     FILE_UPLOAD_S3_BUCKET: lmm-br-wallscratch-files-bucket-0001-${self:provider.stage}
     USER_INDEX_NAME: user-index
     AVAILABLE_INDEX_NAME: available-index
-    AWS_REGION: ${self:provider.region}
+    CLOUD_REGION: ${self:provider.region}
 
 custom:
   documentation:

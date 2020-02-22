@@ -1,9 +1,10 @@
 import { IScratchRepoAdapter } from './IScratchRepoAdapter'
 import { ScratchItemCreateRequest } from '../contracts/ScratchItemCreateRequest';
-import { ScratchItem } from '../domain/scratch/ScratchItem';
+import { ScratchItem, isAvailable } from '../domain/scratch/ScratchItem';
 import { v4 as uuid } from 'uuid';
 import { ScratchItemUpdateRequest } from '../contracts/ScratchItemUpdateRequest';
 import { recoverS3AttachmentURL } from '../infra/s3/s3';
+import { parseUpdateRequest } from './requests/ScratchItemUpdateRequest';
 
 export class ScratchRepo {
 
@@ -18,7 +19,7 @@ export class ScratchRepo {
             userId,
             createdAt: dateNow,
             updatedAt: dateNow,
-            available: request.available,
+            available: isAvailable(request.available),
             caption: request.caption,
             text: request.text,
             attachmentUrl:  request.attachmentUrl
@@ -41,7 +42,7 @@ export class ScratchRepo {
         let current = await this.getById(id)
         let attUrl = recoverS3AttachmentURL(id)
         let updatedAt = new Date().toISOString();
-        const newItem : ScratchItem = { ...current, ...request, attachmentUrl: attUrl, updatedAt };
+        const newItem : ScratchItem = { ...current, ...parseUpdateRequest(request), attachmentUrl: attUrl, updatedAt };
         await this.store.patch(id, newItem);
         return newItem;
     }

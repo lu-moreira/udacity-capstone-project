@@ -3,7 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 import { createLogger } from '../../infra/logger/logger'
-import { ScratchAccess } from '../../infra/dynamodb/ScrachAccess'
+import { ScratchAccess } from '../../infra/dynamodb/ScratchAccess'
 import { ScratchRepo } from '../../repository/ScratchRepo'
 
 const logger = createLogger('delete')

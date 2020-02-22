@@ -8,5 +8,9 @@ export interface ScratchItem {
     inFavor?: number
     disFavor?: number
     attachmentUrl?: string
-    available: boolean
+    available: string
+}
+
+export function isAvailable(v : boolean) : string {
+    return v ? "yes": "no";
 }

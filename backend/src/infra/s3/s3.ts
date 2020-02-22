@@ -1,10 +1,10 @@
 import * as AWS from 'aws-sdk';
 
 const FILE_UPLOAD_S3_BUCKET = process.env.FILE_UPLOAD_S3_BUCKET
-const AWS_REGION = process.env.AWS_REGION
+const CLOUD_REGION = process.env.CLOUD_REGION
 
 export function recoverS3AttachmentURL(id: string) : string{
-    return `https://${FILE_UPLOAD_S3_BUCKET}.s3.${AWS_REGION}.amazonaws.com/${id}`
+    return `https://${FILE_UPLOAD_S3_BUCKET}.s3.${CLOUD_REGION}.amazonaws.com/${id}`
 }
 
 export function recoverS3PreSignedUrl(id: string): string {

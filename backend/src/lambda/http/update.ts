@@ -4,7 +4,7 @@ import * as middy from 'middy';
 import { cors } from 'middy/middlewares';
 import { createLogger } from '../../infra/logger/logger';
 import { ScratchRepo } from '../../repository/ScratchRepo';
-import { ScratchAccess } from '../../infra/dynamodb/ScrachAccess';
+import { ScratchAccess } from '../../infra/dynamodb/ScratchAccess';
 import { ScratchItemUpdateRequest } from '../../contracts/ScratchItemUpdateRequest';
 
 const logger = createLogger('update')

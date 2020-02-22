@@ -9,7 +9,8 @@ export class ScratchAccess implements IScratchRepoAdapter {
     constructor(
         private readonly docClient: DocumentClient = new XAWS.DynamoDB.DocumentClient(),
         private readonly scratchTable = process.env.SCRATCH_TABLE,
-        private readonly userIdIndex = process.env.USER_INDEX_NAME
+        private readonly userIdIndex = process.env.USER_INDEX_NAME,
+        private readonly availableIndex = process.env.AVAILABLE_INDEX_NAME
     ) { }
 
     async post(item: ScratchItem) {
@@ -61,10 +62,10 @@ export class ScratchAccess implements IScratchRepoAdapter {
     async getAllAvailables(): Promise<ScratchItem[]> {
         const params = {
             TableName: this.scratchTable,
-            IndexName: this.userIdIndex,
+            IndexName: this.availableIndex,
             KeyConditionExpression: 'available = :u',
             ExpressionAttributeValues: { 
-                ':u': true 
+                ':u': "yes"
             }
           };
       

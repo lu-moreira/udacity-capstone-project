@@ -4,7 +4,7 @@ import * as middy from 'middy';
 import { cors } from 'middy/middlewares';
 import { ScratchItemCreateRequest } from '../../contracts/ScratchItemCreateRequest';
 import { ScratchRepo } from '../../repository/ScratchRepo';
-import { ScratchAccess } from '../../infra/dynamodb/ScrachAccess';
+import { ScratchAccess } from '../../infra/dynamodb/ScratchAccess';
 import { createLogger } from '../../infra/logger/logger';
 import { getUserIdFromJwt } from '../../infra/auth/utils';
 
