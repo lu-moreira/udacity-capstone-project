@@ -1,0 +1,292 @@
+{
+	"info": {
+		"_postman_id": "65015a72-e282-4184-9c02-0616ad3c7b0f",
+		"name": "udacity-capstone-wallscratch",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Availables scratches",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{appId}}.execute-api.{{region}}.amazonaws.com/{{scope}}/scratches",
+					"protocol": "https",
+					"host": [
+						"{{appId}}",
+						"execute-api",
+						"{{region}}",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{scope}}",
+						"scratches"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "My scratches",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{appId}}.execute-api.{{region}}.amazonaws.com/{{scope}}/scratches/me",
+					"protocol": "https",
+					"host": [
+						"{{appId}}",
+						"execute-api",
+						"{{region}}",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{scope}}",
+						"scratches",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create scratch",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"caption\": \"some caption\",\n    \"text\": \"some text\",\n    \"attachmentUrl\": \"\",\n    \"available\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{appId}}.execute-api.{{region}}.amazonaws.com/{{scope}}/scratches",
+					"protocol": "https",
+					"host": [
+						"{{appId}}",
+						"execute-api",
+						"{{region}}",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{scope}}",
+						"scratches"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update scratch",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"caption\": \"some text\",\n\t\"disFavor\": 0,\n\t\"inFavor\": 0,\n\t\"text\": \"some\",\n    \"available\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{appId}}.execute-api.{{region}}.amazonaws.com/{{scope}}/scratches/:id",
+					"protocol": "https",
+					"host": [
+						"{{appId}}",
+						"execute-api",
+						"{{region}}",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{scope}}",
+						"scratches",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "26ba3345-eb48-4a01-b80e-b155d5add456"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete scratch",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{authToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://{{appId}}.execute-api.{{region}}.amazonaws.com/{{scope}}/scratches/:id",
+					"protocol": "https",
+					"host": [
+						"{{appId}}",
+						"execute-api",
+						"{{region}}",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{scope}}",
+						"scratches",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "26ba3345-eb48-4a01-b80e-b155d5add456"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recover attachment url",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{authToken}}"
+					}
+				],
+				"url": {
+					"raw": "https://{{appId}}.execute-api.{{region}}.amazonaws.com/{{scope}}/scratches/:id/attachment",
+					"protocol": "https",
+					"host": [
+						"{{appId}}",
+						"execute-api",
+						"{{region}}",
+						"amazonaws",
+						"com"
+					],
+					"path": [
+						"{{scope}}",
+						"scratches",
+						":id",
+						"attachment"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "1406ac38-8e1b-4398-80c2-c9a2c226a080",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0583d67a-3bd8-4e25-800b-65a342c8f652",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "4c31fd9e-7b46-41b4-8ac9-5463ab84c4c8",
+			"key": "appId",
+			"value": "sqig9vt2m4",
+			"type": "string"
+		},
+		{
+			"id": "e70d9686-a7d0-4242-a714-8acaf16da390",
+			"key": "region",
+			"value": "us-east-1",
+			"type": "string"
+		},
+		{
+			"id": "7f002d5a-676f-427b-ae91-a743f2f61caa",
+			"key": "scope",
+			"value": "dev",
+			"type": "string"
+		},
+		{
+			"id": "142178cc-06aa-46c2-8e3d-55d2535f3bc5",
+			"key": "authToken",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
