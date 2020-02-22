@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "caption": {
+            "type": "string"
+        },
+        "text": {
+            "type": "string"
+        },
+        "attachmentUrl": {
+            "type": "string"
+        },
+        "available": {
+            "type": "boolean"
+        }
+    },
+    "required": [
+        "caption",
+        "available"
+    ]
+}

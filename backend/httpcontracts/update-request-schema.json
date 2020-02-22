@@ -1,0 +1,24 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "caption": {
+            "type": "string"
+        },
+        "text": {
+            "type": "string"
+        },
+        "inFavor": {
+            "type": "integer"
+        },
+        "disFavor": {
+            "type": "integer"
+        },
+        "attachmentUrl": {
+            "type": "string"
+        },
+        "available": {
+            "type": "boolean"
+        }
+    }
+}
