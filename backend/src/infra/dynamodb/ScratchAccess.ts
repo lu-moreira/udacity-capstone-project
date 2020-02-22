@@ -3,7 +3,11 @@ import * as AWS from 'aws-sdk'
 import * as AWSXRay from 'aws-xray-sdk'
 import { IScratchRepoAdapter } from '../../repository/IScratchRepoAdapter';
 import { ScratchItem } from '../../domain/scratch/ScratchItem';
+import { removeEmptyStringElements } from '../../helpers/object';
+import { createLogger } from '../logger/logger';
 const XAWS = AWSXRay.captureAWS(AWS)
+
+const logger = createLogger('scratchAccess')
 
 export class ScratchAccess implements IScratchRepoAdapter {
     constructor(
@@ -14,9 +18,10 @@ export class ScratchAccess implements IScratchRepoAdapter {
     ) { }
 
     async post(item: ScratchItem) {
+        let newItem: ScratchItem = removeEmptyStringElements(item)
         const params = {
             TableName: this.scratchTable,
-            Item: item
+            Item: newItem
         };
 
         await this.docClient.put(params).promise();
@@ -41,18 +46,22 @@ export class ScratchAccess implements IScratchRepoAdapter {
         const params = {
             TableName: this.scratchTable,
             Key: { id },
-            UpdateExpression: 'set attachmentUrl = :u, caption = :caption, available = :available, updatedAt = :updatedAt, disFavor = :disFavor, inFavor = :inFavor, text = :text',
+            UpdateExpression: 'set attachmentUrl = :u, caption = :caption, available = :available, updatedAt = :updatedAt, disFavor = :disFavor, inFavor = :inFavor, #t = :text',
+            ExpressionAttributeNames: {
+                '#t': 'text'
+            },
             ExpressionAttributeValues: {
-              ':u': item.attachmentUrl,
-              ':caption': item.caption,
-              ':available': item.available,
-              ':updatedAt': item.updatedAt,
-              ':disFavor': item.disFavor,
-              ':inFavor': item.inFavor,
-              ':text': item.text
+                ':u': item.attachmentUrl,
+                ':caption': item.caption,
+                ':available': item.available,
+                ':updatedAt': item.updatedAt,
+                ':disFavor': item.disFavor,
+                ':inFavor': item.inFavor,
+                ':text': item.text
             }
-          };
-          await this.docClient.update(params).promise();
+        };
+        logger.info("Update item params", params);
+        await this.docClient.update(params).promise();
     }
 
     async getAllByUserId(userId: string): Promise<ScratchItem[]> {
@@ -64,13 +73,13 @@ export class ScratchAccess implements IScratchRepoAdapter {
             TableName: this.scratchTable,
             IndexName: this.availableIndex,
             KeyConditionExpression: 'available = :u',
-            ExpressionAttributeValues: { 
+            ExpressionAttributeValues: {
                 ':u': "yes"
             }
-          };
-      
-          const result = await this.docClient.query(params).promise();
-          return result.Items as ScratchItem[]
+        };
+
+        const result = await this.docClient.query(params).promise();
+        return result.Items as ScratchItem[]
     }
 
     async getAllByUserIdWithQuery(userId: string): Promise<ScratchItem[]> {
@@ -78,13 +87,13 @@ export class ScratchAccess implements IScratchRepoAdapter {
             TableName: this.scratchTable,
             IndexName: this.userIdIndex,
             KeyConditionExpression: 'userId = :u',
-            ExpressionAttributeValues: { 
-                ':u': userId 
+            ExpressionAttributeValues: {
+                ':u': userId
             }
-          };
-      
-          const result = await this.docClient.query(params).promise();
-          return result.Items as ScratchItem[]
+        };
+
+        const result = await this.docClient.query(params).promise();
+        return result.Items as ScratchItem[]
     }
 
     async getAllByUserIdWithScan(userId: string): Promise<ScratchItem[]> {
@@ -93,9 +102,9 @@ export class ScratchAccess implements IScratchRepoAdapter {
             IndexName: this.userIdIndex,
             FilterExpression: 'userId=:u',
             ExpressionAttributeValues: { ':u': userId }
-          };
-      
-          const result = await this.docClient.scan(params).promise();
-          return result.Items as ScratchItem[]
+        };
+
+        const result = await this.docClient.scan(params).promise();
+        return result.Items as ScratchItem[]
     }
 }

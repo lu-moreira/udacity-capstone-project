@@ -5,6 +5,9 @@ import { v4 as uuid } from 'uuid';
 import { ScratchItemUpdateRequest } from '../contracts/ScratchItemUpdateRequest';
 import { recoverS3AttachmentURL } from '../infra/s3/s3';
 import { parseUpdateRequest } from './requests/ScratchItemUpdateRequest';
+import { createLogger } from '../infra/logger/logger';
+
+const logger = createLogger('repository')
 
 export class ScratchRepo {
 
@@ -25,6 +28,7 @@ export class ScratchRepo {
             attachmentUrl:  request.attachmentUrl
         }
 
+        logger.info("Item to be created", newItem)
         await this.store.post(newItem);
         return newItem
     }
@@ -40,9 +44,11 @@ export class ScratchRepo {
     // TODO maybe will be good review this
     async updateById(id: string, request: ScratchItemUpdateRequest) : Promise<ScratchItem> {
         let current = await this.getById(id)
+        logger.info("Item recovered", current);
         let attUrl = recoverS3AttachmentURL(id)
         let updatedAt = new Date().toISOString();
         const newItem : ScratchItem = { ...current, ...parseUpdateRequest(request), attachmentUrl: attUrl, updatedAt };
+        logger.info("Item to be updated", newItem);
         await this.store.patch(id, newItem);
         return newItem;
     }
