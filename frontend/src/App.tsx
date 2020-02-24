@@ -1,21 +1,34 @@
 import React, { Component } from 'react'
 import { Link, Route, Router, Switch } from 'react-router-dom'
-import { Grid, Menu, Segment } from 'semantic-ui-react'
+import { Grid, Menu, Segment, Button } from 'semantic-ui-react'
 
 import Auth from './infra/auth/Auth'
-import { EditTodo } from './components/EditTodo'
-import { LogIn } from './components/LogIn'
 import { NotFound } from './components/NotFound'
-import { Todos } from './components/Todos'
+import { AllAvailable } from './components/scratches/AllAvailable'
+import { MyScratches } from './components/scratches/MyScratches'
+import { Public } from './components/Public'
+import { style } from './styles/theme'
+import useWindowScroll from "@react-hook/window-scroll";
+import { getAllAvailable } from './api/scratchApi'
 
-export interface AppProps {}
+const Header = () => {
+  const scrollY = useWindowScroll(5);
+  return (
+    <div className={style("header", scrollY > 64 && "minify")}>
+      <div>
+        <h1> WallScratch </h1>
+      </div>
+    </div>);
+};
+
+export interface AppProps { }
 
 export interface AppProps {
   auth: Auth
   history: any
 }
 
-export interface AppState {}
+export interface AppState { }
 
 export default class App extends Component<AppProps, AppState> {
   constructor(props: AppProps) {
@@ -35,34 +48,40 @@ export default class App extends Component<AppProps, AppState> {
 
   render() {
     return (
-      <div>
-        <Segment style={{ padding: '8em 0em' }} vertical>
-          <Grid container stackable verticalAlign="middle">
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <Router history={this.props.history}>
-                  {this.generateMenu()}
-
-                  {this.generateCurrentPage()}
-                </Router>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
-      </div>
-    )
+      <main className={style("container")}>
+        <div className={style("masonic")}>
+          {this.generateMenu()}
+          <Router history={this.props.history}>
+            {this.generateCurrentPage()}
+          </Router>
+        </div>
+        <Header></Header>
+      </main>
+    );
   }
 
   generateMenu() {
     return (
-      <Menu>
-        <Menu.Item name="home">
-          <Link to="/">Home</Link>
-        </Menu.Item>
-
-        <Menu.Menu position="right">{this.logInLogOutButton()}</Menu.Menu>
+      <Menu secondary>
+        <Menu.Menu position="right">
+          <Menu.Item name="home">
+            <Link to="/">Home</Link>
+          </Menu.Item>
+          {this.meButton()}
+          {this.logInLogOutButton()}</Menu.Menu>
       </Menu>
-    )
+    );
+  }
+
+  meButton() {
+    if (this.props.auth.isAuthenticated()) {
+      return (
+        <Menu.Item name="me-scracthes">
+          <Link to="/me">My Scratches</Link>
+        </Menu.Item>
+      )
+    }
+    return (<div></div>)
   }
 
   logInLogOutButton() {
@@ -83,7 +102,7 @@ export default class App extends Component<AppProps, AppState> {
 
   generateCurrentPage() {
     if (!this.props.auth.isAuthenticated()) {
-      return <LogIn auth={this.props.auth} />
+      return <Public auth={this.props.auth} history={this.props.history} />
     }
 
     return (
@@ -92,15 +111,15 @@ export default class App extends Component<AppProps, AppState> {
           path="/"
           exact
           render={props => {
-            return <Todos {...props} auth={this.props.auth} />
+            return <AllAvailable {...props} auth={this.props.auth} title="Public" recoverItems={getAllAvailable} shouldEdit={false}/>
           }}
         />
 
         <Route
-          path="/todos/:todoId/edit"
+          path="/me"
           exact
           render={props => {
-            return <EditTodo {...props} auth={this.props.auth} />
+            return <MyScratches {...props} auth={this.props.auth} />
           }}
         />
 

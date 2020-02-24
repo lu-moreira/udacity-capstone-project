@@ -51,3 +51,9 @@ export async function getUploadUrl(userToken: string, id: string): Promise<strin
 export async function uploadFile(uploadUrl: string, file: Buffer): Promise<void> {
     await Axios.put(uploadUrl, file)
 };
+
+export async function likeItem(userToken: string, id: string, like: boolean): Promise<void> {
+    await Axios.patch(`${apiEndpoint}/scratches/${id}/${like ? "like" : "dislike"}`, '', {
+        headers: defaultHeaders(userToken)
+    })
+};

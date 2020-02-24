@@ -1,6 +1,6 @@
 import { IScratchRepoAdapter } from './IScratchRepoAdapter'
 import { ScratchItemCreateRequest } from '../contracts/ScratchItemCreateRequest';
-import { ScratchItem, isAvailable } from '../domain/scratch/ScratchItem';
+import { ScratchItem, isAvailable, LikeType, isLikeOrDislike } from '../domain/scratch/ScratchItem';
 import { v4 as uuid } from 'uuid';
 import { ScratchItemUpdateRequest } from '../contracts/ScratchItemUpdateRequest';
 import { recoverS3AttachmentURL } from '../infra/s3/s3';
@@ -59,5 +59,25 @@ export class ScratchRepo {
 
     async getAllAvailables(): Promise<ScratchItem[]> {
         return this.store.getAllAvailables()
+    }
+
+    async updateLike(id: string, typeLike: string) {
+        let current = await this.getById(id)
+        if (!current.inFavor) {
+            current.inFavor = 0
+        }
+        if (!current.disFavor) {
+            current.disFavor = 0
+        }
+
+        if (isLikeOrDislike(typeLike) == LikeType.LIKE) {
+            current.inFavor = current.inFavor + 1
+        } else {
+            current.disFavor = current.disFavor + 1
+        }
+
+        logger.info("Item to be updated", current);
+        await this.store.patch(id, current);
+        return current;
     }
 }

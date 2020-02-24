@@ -5,7 +5,7 @@ import { cors } from 'middy/middlewares';
 import { createLogger } from '../../infra/logger/logger';
 import { ScratchRepo } from '../../repository/ScratchRepo';
 import { ScratchAccess } from '../../infra/dynamodb/ScratchAccess';
-import { ScratchItemUpdateRequest } from '../../contracts/ScratchItemUpdateRequest';
+import { isLikeType } from '../../domain/scratch/ScratchItem';
 
 const logger = createLogger('update')
 const repository = new ScratchRepo(new ScratchAccess());
@@ -24,17 +24,23 @@ const responseError = (e: any) => {
   }
 };
 
-const updateHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+const responseBadRequest = (msg: string) => {
+    return {
+      statusCode: 400,
+      body: msg
+    }
+  };
+
+const likeHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   const id = event.pathParameters.scratchId
+  const typeLike = event.pathParameters.typeLike
+
+  if (!isLikeType(typeLike)) {
+    return responseBadRequest("Invalid like type");
+  }
+
   try {
-    const item: ScratchItemUpdateRequest = JSON.parse(event.body)
-    if (!item.disFavor) {
-      item.disFavor = 0
-    }
-    if (!item.inFavor) {
-      item.inFavor = 0
-    }
-    await repository.updateById(id, item)
+    await repository.updateLike(id, typeLike)
     logger.info('Updated item', { id });
     return responseOK()
   }
@@ -44,4 +50,4 @@ const updateHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPro
   }
 };
 
-export const handler = middy(updateHandler).use(cors({ credentials: true }));
+export const handler = middy(likeHandler).use(cors({ credentials: true }));
