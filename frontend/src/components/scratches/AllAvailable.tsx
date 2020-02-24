@@ -34,10 +34,10 @@ export class AllAvailable extends React.PureComponent<ScratchesProps, ScratchesS
         openModal: false
     }
 
-    handleOnItemUpdate(item: ScratchItem, index: any){
-        const currentItems = this.state.availableScratches
-        currentItems[index] = item
-        this.setState({availableScratches: currentItems})
+    handleOnItemUpdate(item: ScratchItem, index: any) {
+        // const currentItems = this.state.availableScratches
+        // currentItems[index] = item
+        // this.setState({ availableScratches: currentItems })
     }
 
     async recoverAllScratches() {

@@ -5,7 +5,7 @@ import { createItem } from '../../api/scratchApi'
 import Auth from '../../infra/auth/Auth'
 interface CreateProps {
     auth: Auth
-    reloadMe: (v: boolean) => void
+    onItemCreated: (newItem : ScratchItem) => void
 }
 interface CreateState {
     modalOpen: boolean,
@@ -55,7 +55,7 @@ export class CreateScratchModal extends Component<CreateProps, CreateState> {
                 attachmentUrl: "https://via.placeholder.com/300",
                 text: this.state.newText
             })
-            this.props.reloadMe(true)
+            this.props.onItemCreated(item)
         } catch (e) {
             alert(e)
         }

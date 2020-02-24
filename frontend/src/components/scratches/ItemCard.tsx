@@ -77,7 +77,6 @@ export class ItemCard extends React.PureComponent<ItemCardProps, ItemCardState> 
 
     renderUpdateModal() {
         if (this.props.shouldEdit) {
-            console.log(`currentItem from itemcard: ${JSON.stringify(this.state.currentItem)}`)
             return (<UpdateScratchModal
                 auth={this.props.auth}
                 open={this.state.openModal}

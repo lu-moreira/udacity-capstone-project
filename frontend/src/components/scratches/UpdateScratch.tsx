@@ -25,9 +25,20 @@ export class UpdateScratchModal extends Component<UpdateProps, UpdateState> {
         item: {} as ScratchItem
     }
 
+    constructor(props: UpdateProps) {
+        super(props)
+    }
+
     componentDidMount() {
-        console.log(`Update did mount: ${JSON.stringify(this.props.currentItem)}`)
         this.setState({ item: this.props.currentItem })
+    }
+
+    componentDidUpdate(prevProps: Readonly<UpdateProps>, prevState: Readonly<UpdateState>) {
+        // force update, possibly bug 
+        let currentItemState = this.state.item
+        if (currentItemState.id != prevProps.currentItem.id) {
+            this.setState({ item: this.props.currentItem })
+        }
     }
 
     handleOpen = () => this.setState({ modalOpen: true, disableCancel: false })
