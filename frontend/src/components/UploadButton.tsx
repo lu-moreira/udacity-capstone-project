@@ -48,7 +48,6 @@ export class UploadButton extends React.PureComponent<UploadButtonProps, UploadB
             const uploadUrl = await getUploadUrl(this.props.auth.getIdToken(), this.props.id)
             this.setUploadState(UploadState.UploadingFile)
             await uploadFile(uploadUrl, this.state.file)
-            console.log(uploadUrl)
             this.props.onFileUploaded(uploadUrl)
 
         } catch (e) {

@@ -10,6 +10,9 @@ import Auth from '../../infra/auth/Auth'
 import { ScratchItem } from '../../domain/ScratchItem'
 import { Masonry } from "masonic";
 import { ItemCard } from './ItemCard'
+import { onCreateItemSubject } from './CreateScratch'
+import { Subscription } from 'rxjs'
+import { onDeleteItemSubject } from './UpdateScratch'
 
 interface ScratchesProps {
     auth: Auth
@@ -17,6 +20,7 @@ interface ScratchesProps {
     title: string
     shouldEdit: boolean
     recoverItems: () => Promise<ScratchItem[]>
+    newItems?: ScratchItem[]
 }
 
 interface ScratchesState {
@@ -34,10 +38,30 @@ export class AllAvailable extends React.PureComponent<ScratchesProps, ScratchesS
         openModal: false
     }
 
+    // Used for unsubscribing when our component unmounts
+    createItemSub: Subscription
+    deleteSub: Subscription
+
+    constructor(props: ScratchesProps) {
+        super(props)
+
+        this.createItemSub = onCreateItemSubject.subscribe((data:ScratchItem) => {
+            const currentItems = this.state.availableScratches
+            currentItems.push(data)
+            this.setState({ availableScratches: currentItems })
+        })
+
+        this.deleteSub = onDeleteItemSubject.subscribe((data: ScratchItem) => {
+            const currentItems = this.state.availableScratches
+            const newItems = currentItems.filter(x => x.id != data.id)
+            this.setState({ availableScratches: newItems })
+        })
+    }
+
     handleOnItemUpdate(item: ScratchItem, index: any) {
-        // const currentItems = this.state.availableScratches
-        // currentItems[index] = item
-        // this.setState({ availableScratches: currentItems })
+        const currentItems = this.state.availableScratches
+        currentItems[index] = item
+        this.setState({ availableScratches: currentItems })
     }
 
     async recoverAllScratches() {
@@ -52,8 +76,13 @@ export class AllAvailable extends React.PureComponent<ScratchesProps, ScratchesS
         try {
             await this.recoverAllScratches()
         } catch (e) {
-            console.log(`Failed to recover available scratches: ${e.message}`)
+            alert(`Failed to recover available scratches: ${e.message}`)
         }
+    }
+
+    componentWillUnmount() {
+        this.createItemSub.unsubscribe()
+        this.deleteSub.unsubscribe()
     }
 
     render() {
@@ -102,7 +131,6 @@ export class AllAvailable extends React.PureComponent<ScratchesProps, ScratchesS
                             auth={this.props.auth}
                             shouldEdit={this.props.shouldEdit}
                             onItemUpdate={(item: ScratchItem) => {
-                                console.log(`Item updated: ${data.index}`)
                                 this.handleOnItemUpdate(item, data.index)
                             }}
                         />

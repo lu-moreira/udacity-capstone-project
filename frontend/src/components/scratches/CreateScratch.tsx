@@ -3,6 +3,14 @@ import { Button, Header, Icon, Modal, Image, Input, Radio, Form, Divider, Checkb
 import { ScratchItem } from '../../domain/ScratchItem'
 import { createItem } from '../../api/scratchApi'
 import Auth from '../../infra/auth/Auth'
+import {Subject} from 'rxjs'
+
+// The Main Subject/Stream to be listened on.
+export const onCreateItemSubject = new Subject<ScratchItem>()
+
+// This function is used to publish data to the Subject via next().
+export const publish = (data: ScratchItem) => onCreateItemSubject.next(data)
+
 interface CreateProps {
     auth: Auth
     onItemCreated: (newItem : ScratchItem) => void
@@ -55,6 +63,7 @@ export class CreateScratchModal extends Component<CreateProps, CreateState> {
                 attachmentUrl: "https://via.placeholder.com/300",
                 text: this.state.newText
             })
+            publish(item)
             this.props.onItemCreated(item)
         } catch (e) {
             alert(e)

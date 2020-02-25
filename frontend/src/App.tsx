@@ -111,7 +111,7 @@ export default class App extends Component<AppProps, AppState> {
           path="/"
           exact
           render={props => {
-            return <AllAvailable {...props} auth={this.props.auth} title="Public" recoverItems={getAllAvailable} shouldEdit={false}/>
+            return <Public {...props} auth={this.props.auth} history={this.props.history}/>
           }}
         />
 

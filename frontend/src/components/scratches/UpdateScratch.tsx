@@ -1,9 +1,17 @@
 import React, { Component } from 'react'
 import { Button, Header, Icon, Modal, Image, Input, Radio, Form, Divider, CheckboxProps, Item } from 'semantic-ui-react'
 import { ScratchItem, isAvailable, setAvailable } from '../../domain/ScratchItem'
-import { createItem, patchItem } from '../../api/scratchApi'
+import { createItem, patchItem, deleteItem } from '../../api/scratchApi'
 import Auth from '../../infra/auth/Auth'
 import { UploadButton } from '../UploadButton'
+import { Subject } from 'rxjs'
+
+// The Main Subject/Stream to be listened on.
+export const onDeleteItemSubject = new Subject<ScratchItem>()
+
+// This function is used to publish data to the Subject via next().
+export const publish = (data: ScratchItem) => onDeleteItemSubject.next(data)
+
 interface UpdateProps {
     auth: Auth
     open: boolean
@@ -15,6 +23,7 @@ interface UpdateState {
     modalOpen: boolean,
     loading: boolean
     disableCancel: boolean
+    disableDelete: boolean
     item: ScratchItem
 }
 export class UpdateScratchModal extends Component<UpdateProps, UpdateState> {
@@ -22,6 +31,7 @@ export class UpdateScratchModal extends Component<UpdateProps, UpdateState> {
         modalOpen: false,
         loading: false,
         disableCancel: false,
+        disableDelete: false,
         item: {} as ScratchItem
     }
 
@@ -41,11 +51,11 @@ export class UpdateScratchModal extends Component<UpdateProps, UpdateState> {
         }
     }
 
-    handleOpen = () => this.setState({ modalOpen: true, disableCancel: false })
+    handleOpen = () => this.setState({ modalOpen: true, disableCancel: false, disableDelete: false })
 
     handleClose = () => {
         // reset state
-        this.setState({ modalOpen: false, loading: false, disableCancel: false });
+        this.setState({ modalOpen: false, loading: false, disableCancel: false, disableDelete: false });
         this.props.onCancel()
     }
 
@@ -84,12 +94,24 @@ export class UpdateScratchModal extends Component<UpdateProps, UpdateState> {
         return u
     }
 
-    onUpdate = async () => {
-        this.setState({ loading: true, disableCancel: true })
+    onDelete = async () => {
+        this.setState({ loading: true, disableCancel: true, disableDelete: true })
         const currentItem = this.state.item
         try {
-            console.log(currentItem)
-            const item = await patchItem(this.props.auth.getIdToken(), currentItem.id, {
+            await deleteItem(this.props.auth.getIdToken(), currentItem.id)
+            publish(currentItem)
+        } catch (e) {
+            alert(e)
+        }
+
+        this.handleClose()
+    }
+
+    onUpdate = async () => {
+        this.setState({ loading: true, disableCancel: true, disableDelete: true })
+        const currentItem = this.state.item
+        try {
+            await patchItem(this.props.auth.getIdToken(), currentItem.id, {
                 available: isAvailable(currentItem.available),
                 caption: currentItem.caption,
                 text: currentItem.text,
@@ -144,6 +166,9 @@ export class UpdateScratchModal extends Component<UpdateProps, UpdateState> {
                     </Modal.Description>
                 </Modal.Content>
                 <Modal.Actions>
+                    <Button negative onClick={this.onDelete} disabled={this.state.disableDelete} >
+                        Delete <Icon name='chevron right' />
+                    </Button>
                     <Button negative onClick={this.handleClose} disabled={this.state.disableCancel} >
                         Cancel <Icon name='chevron right' />
                     </Button>

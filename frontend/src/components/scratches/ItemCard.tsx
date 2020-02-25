@@ -2,8 +2,7 @@ import Auth from "../../../old/src/auth/Auth";
 import * as React from 'react'
 import { UpdateScratchModal } from './UpdateScratch'
 import { ScratchItem, addInFavor, addDisFavor } from '../../domain/ScratchItem'
-import { style } from "../../styles/theme";
-import { Card, Image, Button, Icon, Label } from "semantic-ui-react";
+import { Card, Image, Icon, Label } from "semantic-ui-react";
 import { likeItem } from "../../api/scratchApi";
 
 interface ItemCardProps {
@@ -34,7 +33,6 @@ export class ItemCard extends React.PureComponent<ItemCardProps, ItemCardState> 
     }
 
     async handleLike() {
-        console.log("like")
         try {
             await likeItem(this.props.auth.getIdToken(), this.state.currentItem.id, true)
             const currentItem = addInFavor(this.state.currentItem)
@@ -46,7 +44,6 @@ export class ItemCard extends React.PureComponent<ItemCardProps, ItemCardState> 
     }
 
     async handleDisLike() {
-        console.log("dislike")
         try {
             await likeItem(this.props.auth.getIdToken(), this.state.currentItem.id, false)
             const currentItem = addDisFavor(this.state.currentItem)
@@ -58,7 +55,6 @@ export class ItemCard extends React.PureComponent<ItemCardProps, ItemCardState> 
     }
 
     handleItemClick() {
-        console.log(this.props.item.id)
         this.setState({ openModal: true })
     }
 
@@ -103,21 +99,24 @@ export class ItemCard extends React.PureComponent<ItemCardProps, ItemCardState> 
         }
     }
 
+    renderAll() {
+        return (<div>{this.renderUpdateModal()}
+            <Card onClick={this.handleItemClick}>
+                <Image src={this.state.currentItem.attachmentUrl} wrapped ui={false} />
+                <Card.Content>
+                    <Card.Header>{this.state.currentItem.caption}</Card.Header>
+                    <Card.Description>
+                        {this.state.currentItem.text}
+                    </Card.Description>
+                </Card.Content>
+                {this.renderLikeButtons()}
+            </Card>
+        </div>)
+    }
     render() {
-        return (
-            <div>
-                {this.renderUpdateModal()}
-                <Card onClick={this.handleItemClick}>
-                    <Image src={this.state.currentItem.attachmentUrl} wrapped ui={false} />
-                    <Card.Content>
-                        <Card.Header>{this.state.currentItem.caption}</Card.Header>
-                        <Card.Description>
-                            {this.state.currentItem.text}
-                        </Card.Description>
-                    </Card.Content>
-                    {this.renderLikeButtons()}
-                </Card>
-            </div>
-        )
+        if (this.state.currentItem) {
+            return this.renderAll()
+        }
+        return null
     }
 }

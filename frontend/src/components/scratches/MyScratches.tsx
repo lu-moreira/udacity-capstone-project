@@ -13,25 +13,30 @@ interface MyScratchesProps {
 
 interface MyScratchesState {
     countReload: number
+    newItems: ScratchItem[]
 }
 
 export class MyScratches extends React.PureComponent<MyScratchesProps, MyScratchesState> {
     state = {
-        countReload: 1
+        countReload: 1,
+        newItems: [] as ScratchItem[]
+    }
+    constructor(props: MyScratchesProps) {
+        super(props)
+        this.handleOnItemCreated = this.handleOnItemCreated.bind(this)
     }
     onLogin = () => {
         this.props.auth.login()
     }
+
     componentDidMount() {
-
+        this.setState({newItems: [] })
     }
 
-    componentWillUnmount() {
-
-    }
-
-    handleOnItemCreated(item : ScratchItem) {
-
+    handleOnItemCreated(item: ScratchItem) {
+        const items = this.state.newItems
+        items.push(item)
+        this.setState({ newItems: items })
     }
 
     render() {
@@ -42,7 +47,7 @@ export class MyScratches extends React.PureComponent<MyScratchesProps, MyScratch
                 <AllAvailable {...this.props} title="My Scratches" recoverItems={
                     () => {
                         return getAllByUserId(this.props.auth.idToken)
-                    }} shouldEdit />
+                    }} shouldEdit newItems={this.state.newItems} />
                 <Divider />
                 <AllAvailable {...this.props} title="Public" recoverItems={getAllAvailable} shouldEdit={false} />
             </div>
