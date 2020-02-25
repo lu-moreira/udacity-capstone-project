@@ -54,4 +54,29 @@ This should start a development server with the React application that will inte
 
 # Screenshots
 
-TBD
+### Home page, here u can see all available scratches
+![image](https://user-images.githubusercontent.com/3696197/75270808-ee8d9f80-57d9-11ea-9395-8bc11d516af1.png)
+
+### Login is also protected by Auth0
+![image](https://user-images.githubusercontent.com/3696197/75270891-15e46c80-57da-11ea-800e-7cbf8617e5c7.png)
+
+### After u login, u can see that on home page enables votting on scratches
+![image](https://user-images.githubusercontent.com/3696197/75271058-5e038f00-57da-11ea-82d7-4462c3220c2e.png)
+
+### Accessing My Scratches page, u can create, edit or delete your scratches and also see the public ones
+![image](https://user-images.githubusercontent.com/3696197/75271228-a02cd080-57da-11ea-8a1d-2c17f7e8b758.png)
+
+### For create a scratch just hit the button, tip a title, description and if is available for public or not
+![image](https://user-images.githubusercontent.com/3696197/75271338-cce0e800-57da-11ea-9cf6-ca22bb17abd5.png)
+
+### After you create, will be see the scratch like this.
+_*Important* seams that has a little bug using monsaic render, so just scroll down and up the page for see the new created scratch_
+![image](https://user-images.githubusercontent.com/3696197/75271477-04e82b00-57db-11ea-9c47-6f8390a4015c.png)
+
+### Once created, u can upload a image file, and update the scratch. Also u can delete too.
+![image](https://user-images.githubusercontent.com/3696197/75271724-6b6d4900-57db-11ea-8917-9b3908e0e2fb.png)
+
+
+# Demo
+![gif](http://g.recordit.co/QXfiPhCCgn.gif)
+
