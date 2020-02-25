@@ -1,4 +1,4 @@
-import Auth from "../../../old/src/auth/Auth";
+import Auth from "../../infra/auth/Auth";
 import * as React from 'react'
 import { UpdateScratchModal } from './UpdateScratch'
 import { ScratchItem, addInFavor, addDisFavor } from '../../domain/ScratchItem'
