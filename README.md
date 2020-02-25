@@ -76,7 +76,6 @@ _*Important* seams that has a little bug using monsaic render, so just scroll do
 ### Once created, u can upload a image file, and update the scratch. Also u can delete too.
 ![image](https://user-images.githubusercontent.com/3696197/75271724-6b6d4900-57db-11ea-8917-9b3908e0e2fb.png)
 
-
 # Demo
-![gif](http://g.recordit.co/QXfiPhCCgn.gif)
-
+![app-running](http://g.recordit.co/QXfiPhCCgn.gif)
+http://g.recordit.co/QXfiPhCCgn.gif
