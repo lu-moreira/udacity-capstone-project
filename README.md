@@ -77,5 +77,7 @@ _*Important* seams that has a little bug using monsaic render, so just scroll do
 ![image](https://user-images.githubusercontent.com/3696197/75271724-6b6d4900-57db-11ea-8917-9b3908e0e2fb.png)
 
 # Demo
+
 ![app-running](http://g.recordit.co/QXfiPhCCgn.gif)
-http://g.recordit.co/QXfiPhCCgn.gif
+
+**Important** if the image don't shows up, try see with this link: http://g.recordit.co/QXfiPhCCgn.gif
