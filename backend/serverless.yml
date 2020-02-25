@@ -147,6 +147,26 @@ functions:
         Resource:
           - "*"
 
+  UpdateLike:
+    handler: src/lambda/http/like.handler
+    events:
+      - http:
+          method: patch
+          path: scratches/{scratchId}/{typeLike}
+          cors: true
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem # Get item to obtain current value "defaults" before updating
+          - dynamodb:UpdateItem
+        Resource: ${self:provider.environment.SCRATCH_TABLE_ARN}
+      - Effect: Allow
+        Action:
+          - "xray:PutTraceSegments"
+          - "xray:PutTelemetryRecords"
+        Resource:
+          - "*"
+          
   Delete:
     handler: src/lambda/http/delete.handler
     events:
