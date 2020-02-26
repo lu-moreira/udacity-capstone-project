@@ -42,7 +42,7 @@ sls deploy -v
 
 ## Frontend
 
-To run a client application first edit the `client/src/config.ts` file to set correct parameters. And then run the following commands:
+To run a client application first edit the `frontend/src/config.ts` file to set correct parameters. And then run the following commands:
 
 ```
 cd client
@@ -50,7 +50,7 @@ npm install
 npm run start
 ```
 
-This should start a development server with the React application that will interact with the serverless TODO application.
+This should start a development server with the React application that will interact with the serverless WallScratch application.
 
 # Screenshots
 
