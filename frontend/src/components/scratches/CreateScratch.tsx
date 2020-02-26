@@ -100,11 +100,11 @@ export class CreateScratchModal extends Component<CreateProps, CreateState> {
                                 placeholder='Write a litle more about this scratch'
                                 onChange={this.handleTextChange}
                             />
-                            <Form.Checkbox
+                            {/* <Form.Checkbox
                                 label='Available'
                                 value='this'
                                 onChange={this.handleAvailableChange}
-                            />
+                            /> */}
                         </Form>
 
                     </Modal.Description>

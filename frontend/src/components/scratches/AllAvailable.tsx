@@ -12,7 +12,7 @@ import { Masonry } from "masonic";
 import { ItemCard } from './ItemCard'
 import { onCreateItemSubject } from './CreateScratch'
 import { Subscription } from 'rxjs'
-import { onDeleteItemSubject } from './UpdateScratch'
+import { onDeleteItemSubject } from './DeleteScratch'
 
 interface ScratchesProps {
     auth: Auth
@@ -45,16 +45,16 @@ export class AllAvailable extends React.PureComponent<ScratchesProps, ScratchesS
     constructor(props: ScratchesProps) {
         super(props)
 
-        this.createItemSub = onCreateItemSubject.subscribe((data:ScratchItem) => {
-            const currentItems = this.state.availableScratches
-            currentItems.push(data)
-            this.setState({ availableScratches: currentItems })
+        this.createItemSub = onCreateItemSubject.subscribe((data: ScratchItem) => {
+            this.setState({
+                availableScratches: [... this.state.availableScratches, data]
+            })
         })
 
         this.deleteSub = onDeleteItemSubject.subscribe((data: ScratchItem) => {
-            const currentItems = this.state.availableScratches
-            const newItems = currentItems.filter(x => x.id != data.id)
-            this.setState({ availableScratches: newItems })
+            this.setState({
+                availableScratches: this.state.availableScratches.filter(x => x.id != data.id)
+            })
         })
     }
 
@@ -104,7 +104,7 @@ export class AllAvailable extends React.PureComponent<ScratchesProps, ScratchesS
         if (this.state.loadingScratches) {
             return this.renderLoading()
         }
-        return this.renderAllScratches()
+        return this.renderAllScratchesV2()
     }
 
     renderLoading() {
@@ -117,7 +117,39 @@ export class AllAvailable extends React.PureComponent<ScratchesProps, ScratchesS
         )
     }
 
+    renderAllScratchesV2() {
+        if (!this.state.availableScratches || this.state.availableScratches.length == 0) {
+            return (<div>
+                <h3>Seams that you don't have any scratch, try to create one.</h3>
+            </div>)
+        }
+        return (
+            <Grid relaxed columns={3}>
+                {
+                    this.state.availableScratches.map((item, index) => {
+                        return (
+                            <Grid.Column key={item.id}>
+                                <ItemCard
+                                    item={item}
+                                    auth={this.props.auth}
+                                    shouldEdit={this.props.shouldEdit}
+                                    onItemUpdate={(item: ScratchItem) => {
+                                        this.handleOnItemUpdate(item, index)
+                                    }}
+                                />
+                            </Grid.Column>
+                        )
+                    })
+                }
+            </Grid>)
+    }
+
     renderAllScratches() {
+        if (this.state.availableScratches) {
+            return (<div>
+                <h3>Seams that you don't have any scratch, try to create one.</h3>
+            </div>)
+        }
         return (
             <Masonry
                 items={this.state.availableScratches}

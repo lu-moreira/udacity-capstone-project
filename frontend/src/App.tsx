@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
 import { Link, Route, Router, Switch } from 'react-router-dom'
-import { Grid, Menu, Segment, Button } from 'semantic-ui-react'
+import { Menu } from 'semantic-ui-react'
 
 import Auth from './infra/auth/Auth'
 import { NotFound } from './components/NotFound'
-import { AllAvailable } from './components/scratches/AllAvailable'
 import { MyScratches } from './components/scratches/MyScratches'
 import { Public } from './components/Public'
 import { style } from './styles/theme'
 import useWindowScroll from "@react-hook/window-scroll";
-import { getAllAvailable } from './api/scratchApi'
+import { LogIn } from './pages/LogIn'
 
 const Header = () => {
   const scrollY = useWindowScroll(5);
@@ -67,7 +66,7 @@ export default class App extends Component<AppProps, AppState> {
           <Menu.Item name="home">
             <Link to="/">Home</Link>
           </Menu.Item>
-          {this.meButton()}
+          {/* {this.meButton()} */}
           {this.logInLogOutButton()}</Menu.Menu>
       </Menu>
     );
@@ -102,21 +101,21 @@ export default class App extends Component<AppProps, AppState> {
 
   generateCurrentPage() {
     if (!this.props.auth.isAuthenticated()) {
-      return <Public auth={this.props.auth} history={this.props.history} />
+      return <LogIn auth={this.props.auth} />
     }
 
     return (
       <Switch>
-        <Route
+        {/* <Route
           path="/"
           exact
           render={props => {
             return <Public {...props} auth={this.props.auth} history={this.props.history}/>
           }}
-        />
+        /> */}
 
         <Route
-          path="/me"
+          path="/"
           exact
           render={props => {
             return <MyScratches {...props} auth={this.props.auth} />

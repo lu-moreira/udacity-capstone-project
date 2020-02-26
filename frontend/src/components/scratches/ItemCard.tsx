@@ -1,9 +1,10 @@
 import Auth from "../../infra/auth/Auth";
 import * as React from 'react'
-import { UpdateScratchModal } from './UpdateScratch'
 import { ScratchItem, addInFavor, addDisFavor } from '../../domain/ScratchItem'
-import { Card, Image, Icon, Label } from "semantic-ui-react";
+import { Card, Image, Icon, Label, Button } from "semantic-ui-react";
 import { likeItem } from "../../api/scratchApi";
+import DeleteScratchModal from "./DeleteScratch";
+import { V2UpdateScratchModal } from "./UpdateScratchV2";
 
 interface ItemCardProps {
     item: ScratchItem
@@ -13,23 +14,27 @@ interface ItemCardProps {
 }
 
 interface ItemCardState {
-    openModal: boolean
+    openUpdateModal: boolean
+    openDeleteModal: boolean
     currentItem: ScratchItem
 }
 
 export class ItemCard extends React.PureComponent<ItemCardProps, ItemCardState> {
     state = {
-        openModal: false,
+        openDeleteModal: false,
+        openUpdateModal: false,
         currentItem: {} as ScratchItem
     }
 
     constructor(props: ItemCardProps) {
         super(props);
-        this.handleItemClick = this.handleItemClick.bind(this);
-        this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.handleOnClickUpdateButton = this.handleOnClickUpdateButton.bind(this);
+        this.handleOnClickCloseUpdateButton = this.handleOnClickCloseUpdateButton.bind(this);
         this.handleOnItemUpdated = this.handleOnItemUpdated.bind(this);
         this.handleDisLike = this.handleDisLike.bind(this);
         this.handleLike = this.handleLike.bind(this);
+        this.handleOnClickCloseDeleteButton = this.handleOnClickCloseDeleteButton.bind(this);
+        this.handleOnClickDeleteButton = this.handleOnClickDeleteButton.bind(this);
     }
 
     async handleLike() {
@@ -54,12 +59,20 @@ export class ItemCard extends React.PureComponent<ItemCardProps, ItemCardState> 
         }
     }
 
-    handleItemClick() {
-        this.setState({ openModal: true })
+    handleOnClickUpdateButton() {
+        this.setState({ openUpdateModal: true })
     }
 
-    handleCloseModal() {
-        this.setState({ openModal: false })
+    handleOnClickCloseUpdateButton() {
+        this.setState({ openUpdateModal: false })
+    }
+
+    handleOnClickDeleteButton() {
+        this.setState({ openDeleteModal: true })
+    }
+
+    handleOnClickCloseDeleteButton() {
+        this.setState({ openDeleteModal: false })
     }
 
     handleOnItemUpdated(item: ScratchItem) {
@@ -71,12 +84,25 @@ export class ItemCard extends React.PureComponent<ItemCardProps, ItemCardState> 
         this.setState({ currentItem: this.props.item })
     }
 
+    renderDeleteModal() {
+        if (this.props.shouldEdit) {
+            return (
+                <DeleteScratchModal
+                    auth={this.props.auth}
+                    open={this.state.openDeleteModal}
+                    onClose={this.handleOnClickCloseDeleteButton}
+                    scratchItem={this.state.currentItem} />
+            )
+        }
+        return null
+    }
+
     renderUpdateModal() {
         if (this.props.shouldEdit) {
-            return (<UpdateScratchModal
+            return (<V2UpdateScratchModal
                 auth={this.props.auth}
-                open={this.state.openModal}
-                onCancel={this.handleCloseModal}
+                open={this.state.openUpdateModal}
+                onCancel={this.handleOnClickCloseUpdateButton}
                 currentItem={this.state.currentItem}
                 onItemUpdated={this.handleOnItemUpdated} />)
         }
@@ -99,9 +125,26 @@ export class ItemCard extends React.PureComponent<ItemCardProps, ItemCardState> 
         }
     }
 
+    renderToolsButtons() {
+        if (this.props.auth.isAuthenticated() && this.props.shouldEdit) {
+            return (<Card.Content extra>
+                <Button.Group fluid size="tiny">
+                    <Button size="mini" color="red" onClick={this.handleOnClickDeleteButton}>
+                        <Icon name='delete' />
+                    </Button>
+                    <Button size="mini" color="blue" onClick={this.handleOnClickUpdateButton}>
+                        <Icon name='edit' />
+                    </Button>
+                </Button.Group>
+            </Card.Content>)
+        }
+    }
+
     renderAll() {
-        return (<div>{this.renderUpdateModal()}
-            <Card onClick={this.handleItemClick}>
+        return (<div >
+            {this.renderUpdateModal()}
+            {this.renderDeleteModal()}
+            <Card>
                 <Image src={this.state.currentItem.attachmentUrl} wrapped ui={false} />
                 <Card.Content>
                     <Card.Header>{this.state.currentItem.caption}</Card.Header>
@@ -110,9 +153,11 @@ export class ItemCard extends React.PureComponent<ItemCardProps, ItemCardState> 
                     </Card.Description>
                 </Card.Content>
                 {this.renderLikeButtons()}
+                {this.renderToolsButtons()}
             </Card>
         </div>)
     }
+
     render() {
         if (this.state.currentItem) {
             return this.renderAll()
