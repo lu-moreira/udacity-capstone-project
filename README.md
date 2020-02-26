@@ -45,7 +45,7 @@ sls deploy -v
 To run a client application first edit the `frontend/src/config.ts` file to set correct parameters. And then run the following commands:
 
 ```
-cd client
+cd frontend
 npm install
 npm run start
 ```
