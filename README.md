@@ -16,7 +16,7 @@ On this app you can, read/like/dislike others scratches and write yours, also at
 
 # Dependencies
 
-Take a look at the package.json files under backend and client folders.
+Take a look at the package.json files under backend and frontend folders.
 
 ## Deploying on your own in AWS
 This assumes that you already have an AWS Profile called *serverless* and are using *us-east-2* region
@@ -42,7 +42,7 @@ sls deploy -v
 
 ## Frontend
 
-To run a client application first edit the `frontend/src/config.ts` file to set correct parameters. And then run the following commands:
+To run a frontend application first edit the `frontend/src/config.ts` file to set correct parameters. And then run the following commands:
 
 ```
 cd frontend
@@ -54,30 +54,30 @@ This should start a development server with the React application that will inte
 
 # Screenshots
 
-### Home page, here u can see all available scratches
-![image](https://user-images.githubusercontent.com/3696197/75270808-ee8d9f80-57d9-11ea-9395-8bc11d516af1.png)
+### Home page, when a user hasn't entered
+![image](https://user-images.githubusercontent.com/45040629/75383203-b0b47800-58ba-11ea-8dc7-3d57fced8a40.png)
 
 ### Login is also protected by Auth0
 ![image](https://user-images.githubusercontent.com/3696197/75270891-15e46c80-57da-11ea-800e-7cbf8617e5c7.png)
 
-### After u login, u can see that on home page enables votting on scratches
-![image](https://user-images.githubusercontent.com/3696197/75271058-5e038f00-57da-11ea-82d7-4462c3220c2e.png)
-
-### Accessing My Scratches page, u can create, edit or delete your scratches and also see the public ones
-![image](https://user-images.githubusercontent.com/3696197/75271228-a02cd080-57da-11ea-8a1d-2c17f7e8b758.png)
+### After logIn, the homepage will be like that when you don't have any scratches. Also will allows you to create scratches
+![image](https://user-images.githubusercontent.com/45040629/75383579-5f58b880-58bb-11ea-8992-4eb4924286c3.png)
 
 ### For create a scratch just hit the button, tip a title, description and if is available for public or not
-![image](https://user-images.githubusercontent.com/3696197/75271338-cce0e800-57da-11ea-9cf6-ca22bb17abd5.png)
+![image](https://user-images.githubusercontent.com/45040629/75383703-9cbd4600-58bb-11ea-8def-6a54632d1248.png)
 
-### After you create, will be see the scratch like this.
-_*Important* seams that has a little bug using monsaic render, so just scroll down and up the page for see the new created scratch_
-![image](https://user-images.githubusercontent.com/3696197/75271477-04e82b00-57db-11ea-9c47-6f8390a4015c.png)
+### After you create, will be see the home page like this.
+![image](https://user-images.githubusercontent.com/45040629/75383777-bf4f5f00-58bb-11ea-8ac4-3b4db2ae767f.png)
 
-### Once created, u can upload a image file, and update the scratch. Also u can delete too.
-![image](https://user-images.githubusercontent.com/3696197/75271724-6b6d4900-57db-11ea-8917-9b3908e0e2fb.png)
+### Once created, you can update or delete the scratch. On the update view, u can upload a new image for that scratch, just hit the blue button. 
+![image](https://user-images.githubusercontent.com/45040629/75383915-fa519280-58bb-11ea-936b-c3fa8bbf110b.png)
+
+### Also u can delete the scratch
+![image](https://user-images.githubusercontent.com/45040629/75383996-240ab980-58bc-11ea-9138-81f282562599.png)
+
 
 # Demo
 
-![app-running](http://g.recordit.co/QXfiPhCCgn.gif)
+![app-running](http://g.recordit.co/jGgXuk24ir.gif)
 
-**Important** if the image don't shows up, try see with this link: http://g.recordit.co/QXfiPhCCgn.gif
+**Important** if the image don't shows up, try see with this link: http://g.recordit.co/jGgXuk24ir.gif
