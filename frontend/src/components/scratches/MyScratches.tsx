@@ -48,8 +48,8 @@ export class MyScratches extends React.PureComponent<MyScratchesProps, MyScratch
                     () => {
                         return getAllByUserId(this.props.auth.idToken)
                     }} shouldEdit newItems={this.state.newItems} />
-                <Divider />
-                <AllAvailable {...this.props} title="Public" recoverItems={getAllAvailable} shouldEdit={false} />
+                {/* <Divider />
+                <AllAvailable {...this.props} title="Public" recoverItems={getAllAvailable} shouldEdit={false} /> */}
             </div>
         )
     }
